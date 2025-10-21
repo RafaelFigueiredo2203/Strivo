@@ -1,4 +1,5 @@
 // App.tsx
+import { useRouter } from 'expo-router';
 import { Bookmark, Heart, MessageCircle, Plus, Share2 } from 'lucide-react-native';
 import React, { useState } from 'react';
 import {
@@ -36,7 +37,7 @@ export default function Feed() {
   const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set());
   const [savedPosts, setSavedPosts] = useState<Set<number>>(new Set());
   const [followingUsers, setFollowingUsers] = useState<Set<number>>(new Set());
-
+  const navigation = useRouter();
   const stories: Story[] = [
     { 
       id: 1, 
@@ -130,7 +131,7 @@ export default function Feed() {
           <TouchableOpacity>
             <Heart size={28} color="#fff" />
           </TouchableOpacity>
-          <TouchableOpacity className="relative">
+          <TouchableOpacity className="relative" onPress={() => navigation.push('/screens/chat/message-screen')}>
             <MessageCircle size={28} color="#fff" />
             <View className="absolute -top-1 -right-1 bg-red-600 rounded-full w-5 h-5 items-center justify-center">
               <Text className="text-white text-xs font-bold">3</Text>

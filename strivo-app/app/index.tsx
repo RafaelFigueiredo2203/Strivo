@@ -1,221 +1,260 @@
-// App.js
-import { ArrowRight, Circle, Search, User } from 'lucide-react-native';
+// App.tsx
+import { useRouter } from 'expo-router';
+import { Bookmark, Heart, MessageCircle, Plus, Share2 } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import "../global.css";
+import {
+  Dimensions,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
-interface Categories{
-  id:number;
-  name:string;
-  image:string;
-  viewers:string;
-  tags:string[];
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+
+interface Story {
+  id: number;
+  username: string;
+  avatar: string;
+  isUser?: boolean;
 }
 
-export default function Streams() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<Categories | null>(null);
+interface Post {
+  id: number;
+  username: string;
+  userAvatar: string;
+  music: string;
+  image: string;
+  likes: number;
+  comments: number;
+  shares: number;
+}
 
-  const categories = [
+export default function Feed() {
+  const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set());
+  const [savedPosts, setSavedPosts] = useState<Set<number>>(new Set());
+  const [followingUsers, setFollowingUsers] = useState<Set<number>>(new Set());
+  const navigation = useRouter();
+  const stories: Story[] = [
     { 
       id: 1, 
-      name: 'Roblox', 
-      image: require('../assets/images/roblox.png'),
-      viewers: '0 mil assistindo', 
-      tags: ['Adventure', 'Casual'] 
+      username: 'Seu story', 
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=User', 
+      isUser: true 
     },
-    { 
-      id: 2, 
-      name: 'Grand Theft Auto V', 
-      image: require('../assets/images/gta.png'),
-      viewers: '0 mil assistindo', 
-      tags: ['Action', 'Shooter'] 
-    },
-    { 
-      id: 3, 
-      name: 'Fortnite', 
-      image: require('../assets/images/fortnitepng.png'),
-      viewers: '0 mil assistindo', 
-      tags: ['Battle Royale', 'Shooter'] 
-    }
+    { id: 2, username: 'joaogamer', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Joao' },
+    { id: 3, username: 'maristreams', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mari' },
+    { id: 4, username: 'pedrolive', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Pedro' },
+    { id: 5, username: 'anaplay', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ana' },
   ];
 
-  // Tela de categoria selecionada
-  if (selectedCategory) {
-    return (
-      <SafeAreaView className="flex-1 bg-black">
-        <View className="border-b border-zinc-800">
-          <View className="flex-row items-center px-4 pt-4 pb-2">
-            <TouchableOpacity onPress={() => setSelectedCategory(null)}>
-              <Text className="text-white text-base">← Voltar</Text>
-            </TouchableOpacity>
-          </View>
-          <View className="flex-row items-center px-4">
-            <TouchableOpacity className="px-4 py-3">
-              <Text className="text-zinc-400">Ao Vivo</Text>
-            </TouchableOpacity>
-            <View className="px-4 py-3 border-b-2 border-green-500">
-              <Text className="text-green-500 font-semibold">Categorias</Text>
-            </View>
-            <TouchableOpacity className="px-4 py-3">
-              <Text className="text-zinc-400">Clipes</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+  const posts: Post[] = [
+    {
+      id: 1,
+      username: 'gr6explodeoriginal',
+      userAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=gr6',
+      music: 'MC Ryan SP, MC IG, MC Don Juan',
+      image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&h=1200&fit=crop',
+      likes: 1543,
+      comments: 82,
+      shares: 45,
+    },
+    {
+      id: 2,
+      username: 'streamerbr',
+      userAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=streamer',
+      music: 'Trap do Momento - Beat Pesado',
+      image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=1200&fit=crop',
+      likes: 2891,
+      comments: 156,
+      shares: 78,
+    },
+    {
+      id: 3,
+      username: 'gamerproyt',
+      userAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=gamer',
+      music: 'Lo-Fi Gaming Beats',
+      image: 'https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=800&h=1200&fit=crop',
+      likes: 3245,
+      comments: 203,
+      shares: 91,
+    },
+  ];
 
-        <ScrollView className="flex-1 p-4">
-          <View className="bg-zinc-900 rounded-lg p-8 items-center">
-            <View className="w-16 h-16 bg-zinc-800 rounded-lg mb-4 items-center justify-center">
-              <Circle size={12} color="#3f3f46" />
-            </View>
-            <Text className="text-zinc-500 text-center">
-              Nenhuma live nesta categoria
-            </Text>
-            <Text className="text-zinc-600 text-sm text-center mt-2">
-              Seja o primeiro a transmitir!
-            </Text>
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    );
-  }
+  const toggleLike = (postId: number) => {
+    setLikedPosts(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(postId)) {
+        newSet.delete(postId);
+      } else {
+        newSet.add(postId);
+      }
+      return newSet;
+    });
+  };
 
-  // Tela principal
+  const toggleSave = (postId: number) => {
+    setSavedPosts(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(postId)) {
+        newSet.delete(postId);
+      } else {
+        newSet.add(postId);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleFollow = (postId: number) => {
+    setFollowingUsers(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(postId)) {
+        newSet.delete(postId);
+      } else {
+        newSet.add(postId);
+      }
+      return newSet;
+    });
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-black">
-      <ScrollView className="flex-1">
-        {/* Header com Search */}
-        <View className="px-4 pt-4 pb-6">
-          <View className="flex-row items-center bg-zinc-900 rounded-lg px-4 py-3">
-            <Search size={20} color="#71717a" />
-            <TextInput
-              placeholder="Pesquisar lives ou streamers..."
-              placeholderTextColor="#71717a"
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-              className="flex-1 ml-3 text-white text-base"
-            />
-          </View>
-        </View>
-
-        {/* Top 5 Streamers do Mês */}
-        <View className="px-4 mb-8">
-          <Text className="text-white text-xl font-bold mb-4">
-            Top 5 Streamers do Mês
-          </Text>
-          
-          <View className="bg-zinc-900 rounded-lg p-6">
-            <View className="items-center justify-center py-8">
-              <User size={48} color="#3f3f46" />
-              <Text className="text-zinc-500 text-center mt-4">
-                Nenhum streamer ativo ainda
-              </Text>
-              <Text className="text-zinc-600 text-sm text-center mt-2">
-                Seja o primeiro a fazer live!
-              </Text>
+      <StatusBar barStyle="light-content" backgroundColor="#000" />
+      
+      {/* Header */}
+      <View className="flex-row justify-between items-center px-4 py-3 bg-black">
+        <Text className="text-[#7FFF00] text-3xl font-bold">Strivo</Text>
+        <View className="flex-row items-center gap-4">
+          <TouchableOpacity>
+            <Heart size={28} color="#fff" />
+          </TouchableOpacity>
+          <TouchableOpacity className="relative" onPress={() => navigation.push('/screens/chat/message-screen')}>
+            <MessageCircle size={28} color="#fff" />
+            <View className="absolute -top-1 -right-1 bg-red-600 rounded-full w-5 h-5 items-center justify-center">
+              <Text className="text-white text-xs font-bold">3</Text>
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
+      </View>
 
-        {/* Lives */}
-        <View className="px-4 mb-8">
-          <Text className="text-white text-xl font-bold mb-4">Lives</Text>
-          
-          <View className="bg-zinc-900 rounded-lg p-6">
-            <View className="items-center justify-center py-8">
-              <View className="w-16 h-16 bg-zinc-800 rounded-full items-center justify-center mb-4">
-                <Circle size={12} color="#3f3f46" fill="#3f3f46" />
-              </View>
-              <Text className="text-zinc-500 text-center">
-                Nenhuma live no momento
-              </Text>
-              <Text className="text-zinc-600 text-sm text-center mt-2">
-                Aguarde ou comece a transmitir
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Principais Categorias Ao Vivo */}
-        <View className="px-4 mb-8">
-          <View className="flex-row items-center justify-between mb-4">
-            <Text className="text-white text-xl font-bold">
-              Principais Categorias Ao Vivo
-            </Text>
-            <TouchableOpacity className="flex-row items-center">
-              <ArrowRight size={20} color="#22c55e" />
-            </TouchableOpacity>
-          </View>
-          
-          <ScrollView 
-            horizontal 
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingRight: 16 }}
-          >
-            {categories.map((category) => (
-             <TouchableOpacity
-                key={category.id}
-                onPress={() => setSelectedCategory(category)}
-                className="mr-3 rounded-lg overflow-hidden"
-                style={{ width: 128, height: 250 }} // altura fixa
-              >
-                <View className="relative h-44 bg-zinc-800">
-                  <Image 
-                    source={category.image}
-                    style={{ width: '100%', height: '100%' }}
-                    resizeMode="cover"
-                  />
-                  <View className="absolute inset-0 bg-black/60" />
-                  <View className="absolute top-2 left-2 bg-red-600 px-2 py-1 rounded-md flex-row items-center">
-                    <Circle size={6} color="white" fill="white" />
-                    <Text className="text-white text-xs font-bold ml-1">AO VIVO</Text>
+      {/* Stories */}
+      <View className="bg-black border-b border-gray-800">
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          className="px-2 py-3"
+        >
+          {stories.map((story) => (
+            <TouchableOpacity key={story.id} className="items-center mx-2">
+              <View className={`relative ${story.isUser ? 'border-2 border-[#7FFF00]' : 'border-2 border-gray-700'} rounded-full p-0.5`}>
+                <Image
+                  source={{ uri: story.avatar }}
+                  className="w-16 h-16 rounded-full"
+                />
+                {story.isUser && (
+                  <View className="absolute bottom-0 right-0 bg-[#7FFF00] rounded-full w-5 h-5 items-center justify-center">
+                    <Plus size={16} color="#000" strokeWidth={3} />
                   </View>
-                  <View className="absolute bottom-0 left-0 right-0 p-2">
-                    <Text className="text-white font-bold text-sm" numberOfLines={2}>
-                      {category.name}
+                )}
+              </View>
+              <Text className="text-white text-xs mt-1 max-w-[70px]" numberOfLines={1}>
+                {story.username}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
+
+      {/* Feed */}
+      <ScrollView className="flex-1 bg-black">
+        {posts.map((post) => (
+          <View key={post.id} className="mb-1">
+            {/* Post Header */}
+            <View className="flex-row items-center justify-between px-3 py-2">
+              <View className="flex-row items-center flex-1">
+                <Image
+                  source={{ uri: post.userAvatar }}
+                  className="w-10 h-10 rounded-full border-2 border-[#7FFF00]"
+                />
+                <View className="ml-3 flex-1">
+                  <Text className="text-white font-semibold text-sm">
+                    {post.username}
+                  </Text>
+                  <View className="flex-row items-center">
+                    <Text className="text-gray-400 text-xs" numberOfLines={1}>
+                      🎵 {post.music}
                     </Text>
                   </View>
                 </View>
-
-                <View className="bg-zinc-900 p-2 flex-1">
-                  <Text className="text-white font-semibold text-xs mb-1" numberOfLines={1}>
-                    {category.name}
-                  </Text>
-                  <Text className="text-zinc-500 text-xs mb-2">
-                    {category.viewers}
-                  </Text>
-                  <View className="flex-row flex-wrap gap-1">
-                    {category.tags.map((tag, idx) => (
-                      <View key={idx} className="bg-zinc-800 px-2 py-0.5 rounded">
-                        <Text className="text-zinc-400 text-xs">{tag}</Text>
-                      </View>
-                    ))}
-                  </View>
-                </View>
-              </TouchableOpacity>
-
-            ))}
-          </ScrollView>
-        </View>
-
-        {/* Jogos de Tiro */}
-        <View className="px-4 pb-8">
-          <Text className="text-white text-xl font-bold mb-4">
-            Jogos de Tiro
-          </Text>
-          
-          <View className="bg-zinc-900 rounded-lg p-6">
-            <View className="items-center justify-center py-8">
-              <View className="w-16 h-16 bg-zinc-800 rounded-lg items-center justify-center mb-4">
-                <View className="w-6 h-6 border-2 border-zinc-700 rounded" />
               </View>
-              <Text className="text-zinc-500 text-center">
-                Nenhuma live nesta categoria
-              </Text>
+              
+              <TouchableOpacity 
+                onPress={() => toggleFollow(post.id)}
+                className={`px-4 py-1.5 rounded-md ${
+                  followingUsers.has(post.id) ? 'bg-gray-700' : 'bg-[#7FFF00]'
+                }`}
+              >
+                <Text className={`font-semibold text-sm ${
+                  followingUsers.has(post.id) ? 'text-white' : 'text-black'
+                }`}>
+                  {followingUsers.has(post.id) ? 'Seguindo' : 'Seguir'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Post Image */}
+            <Image
+              source={{ uri: post.image }}
+              className="w-full"
+              style={{ height: SCREEN_HEIGHT * 0.6 }}
+              resizeMode="cover"
+            />
+
+            {/* Post Actions */}
+            <View className="flex-row items-center justify-between px-3 py-3">
+              <View className="flex-row items-center gap-4">
+                <TouchableOpacity 
+                  onPress={() => toggleLike(post.id)}
+                  className="flex-row items-center"
+                >
+                  <Heart 
+                    size={26} 
+                    color={likedPosts.has(post.id) ? '#7FFF00' : '#fff'} 
+                    fill={likedPosts.has(post.id) ? '#7FFF00' : 'transparent'}
+                  />
+                  <Text className="text-white text-sm ml-1 font-medium">
+                    {likedPosts.has(post.id) ? post.likes + 1 : post.likes}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity className="flex-row items-center">
+                  <MessageCircle size={26} color="#fff" />
+                  <Text className="text-white text-sm ml-1 font-medium">
+                    {post.comments}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity className="flex-row items-center">
+                  <Share2 size={24} color="#fff" />
+                  <Text className="text-white text-sm ml-1 font-medium">
+                    {post.shares}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <TouchableOpacity onPress={() => toggleSave(post.id)}>
+                <Bookmark 
+                  size={26} 
+                  color={savedPosts.has(post.id) ? '#7FFF00' : '#fff'} 
+                  fill={savedPosts.has(post.id) ? '#7FFF00' : 'transparent'}
+                />
+              </TouchableOpacity>
             </View>
           </View>
-        </View>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );

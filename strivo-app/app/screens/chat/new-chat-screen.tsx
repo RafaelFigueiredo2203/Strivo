@@ -52,10 +52,10 @@ export default function NewChatScreen() {
 
         {/* Search Bar */}
         <View className="flex-row items-center bg-gray-900 rounded-xl px-4 py-2.5">
-          <Search size={18} color="#00ff88" />
+          <Search size={18} color="#00FF40" />
           <TextInput
             placeholder="Buscar usuários..."
-            placeholderTextColor="#00ff88"
+            placeholderTextColor="#00FF40"
             value={searchText}
             onChangeText={setSearchText}
             className="flex-1 ml-3 text-white text-base"

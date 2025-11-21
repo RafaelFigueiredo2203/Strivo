@@ -1,7 +1,7 @@
 // app/_layout.tsx
 import { Tabs } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Clapperboard, Home, User, Video } from 'lucide-react-native';
+import { Clapperboard, Home, Search, User, Video } from 'lucide-react-native';
 import { Image } from 'react-native';
 
 export default function RootLayout() {
@@ -14,7 +14,7 @@ export default function RootLayout() {
        initialRouteName="index"
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: '#fff',
+          tabBarActiveTintColor: '#00FF40',
           tabBarStyle: {
             backgroundColor: '#000',
           },
@@ -26,6 +26,14 @@ export default function RootLayout() {
           }}
           
         />
+
+        <Tabs.Screen
+          name="screens/searchScreen"
+          options={{ title: '' , tabBarIcon: ({ color, size }) => <Search color={color} size={size} />,
+          }}
+          
+        />
+
         <Tabs.Screen
           name="screens/streams"
           options={{ title: '' , tabBarIcon: ({ color, size }) => <Video color={color} size={size} />,
@@ -76,7 +84,19 @@ export default function RootLayout() {
           options={{ href: null }}
         />
         <Tabs.Screen
+          name="screens/create-post"
+          options={{ href: null }}
+        />
+        <Tabs.Screen
           name="screens/chat/new-chat-screen"
+          options={{ href: null }}
+        />
+        <Tabs.Screen
+          name="screens/chat-live"
+          options={{ href: null }}
+        />
+        <Tabs.Screen
+          name="screens/suport-creator"
           options={{ href: null }}
         />
       </Tabs>

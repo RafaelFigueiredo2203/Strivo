@@ -1,4 +1,6 @@
 // App.tsx
+import CreateModal from '@/src/components/create-post';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Bookmark, Heart, MessageCircle, Plus, Share2 } from 'lucide-react-native';
 import React, { useState } from 'react';
@@ -38,6 +40,8 @@ export default function Feed() {
   const [savedPosts, setSavedPosts] = useState<Set<number>>(new Set());
   const [followingUsers, setFollowingUsers] = useState<Set<number>>(new Set());
   const navigation = useRouter();
+  const [modalVisible, setModalVisible] = useState(false);
+  const router = useRouter();
   const stories: Story[] = [
     { 
       id: 1, 
@@ -126,8 +130,11 @@ export default function Feed() {
       
       {/* Header */}
       <View className="flex-row justify-between items-center px-4 py-3 bg-black">
-        <Text className="text-[#7FFF00] text-3xl font-bold">Strivo</Text>
+        <Text className="text-[#00FF40] text-3xl font-bold">Strivo</Text>
         <View className="flex-row items-center gap-4">
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <Plus size={28} color="#fff" />
+          </TouchableOpacity>
           <TouchableOpacity>
             <Heart size={28} color="#fff" />
           </TouchableOpacity>
@@ -149,17 +156,47 @@ export default function Feed() {
         >
           {stories.map((story) => (
             <TouchableOpacity key={story.id} className="items-center mx-2">
-              <View className={`relative ${story.isUser ? 'border-2 border-[#7FFF00]' : 'border-2 border-gray-700'} rounded-full p-0.5`}>
-                <Image
-                  source={{ uri: story.avatar }}
-                  className="w-16 h-16 rounded-full"
-                />
-                {story.isUser && (
-                  <View className="absolute bottom-0 right-0 bg-[#7FFF00] rounded-full w-5 h-5 items-center justify-center">
-                    <Plus size={16} color="#000" strokeWidth={3} />
+              {story.isUser ? (
+                <LinearGradient
+                  colors={['#16a34a', '#4ade80', '#d3ef86', '#16a32d']}
+                  locations={[0, 0.3, 0.7, 1]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={{
+                    padding: 3,
+                    borderRadius: 9999,
+                    shadowColor: '#22c55e',
+                    shadowOffset: { width: 0, height: 0 },
+                    shadowOpacity: 0.6,
+                    shadowRadius: 15,
+                    elevation: 10,
+                  }}
+                >
+                  <View style={{ 
+                    backgroundColor: 'black', 
+                    borderRadius: 9999, 
+                    padding: 3 
+                  }}>
+                    <View className="relative">
+                      <Image
+                        source={{ uri: story.avatar }}
+                        className="w-16 h-16 rounded-full"
+                        style={{ borderWidth: 2, borderColor: 'black' }}
+                      />
+                      <View className="absolute bottom-0 right-0 bg-[#00FF40] rounded-full w-5 h-5 items-center justify-center">
+                        <Plus size={16} color="#000" strokeWidth={3} />
+                      </View>
+                    </View>
                   </View>
-                )}
-              </View>
+                </LinearGradient>
+              ) : (
+                <View className="border-2 border-gray-700 rounded-full p-0.5">
+                  <Image
+                    source={{ uri: story.avatar }}
+                    className="w-16 h-16 rounded-full"
+                  />
+                </View>
+              )}
               <Text className="text-white text-xs mt-1 max-w-[70px]" numberOfLines={1}>
                 {story.username}
               </Text>
@@ -177,7 +214,7 @@ export default function Feed() {
               <View className="flex-row items-center flex-1">
                 <Image
                   source={{ uri: post.userAvatar }}
-                  className="w-10 h-10 rounded-full border-2 border-[#7FFF00]"
+                  className="w-10 h-10 rounded-full border-2 border-[#00FF40]"
                 />
                 <View className="ml-3 flex-1">
                   <Text className="text-white font-semibold text-sm">
@@ -194,7 +231,7 @@ export default function Feed() {
               <TouchableOpacity 
                 onPress={() => toggleFollow(post.id)}
                 className={`px-4 py-1.5 rounded-md ${
-                  followingUsers.has(post.id) ? 'bg-gray-700' : 'bg-[#7FFF00]'
+                  followingUsers.has(post.id) ? 'bg-gray-700' : 'bg-[#00FF40]'
                 }`}
               >
                 <Text className={`font-semibold text-sm ${
@@ -222,8 +259,8 @@ export default function Feed() {
                 >
                   <Heart 
                     size={26} 
-                    color={likedPosts.has(post.id) ? '#7FFF00' : '#fff'} 
-                    fill={likedPosts.has(post.id) ? '#7FFF00' : 'transparent'}
+                    color={likedPosts.has(post.id) ? '#00FF40' : '#fff'} 
+                    fill={likedPosts.has(post.id) ? '#00FF40' : 'transparent'}
                   />
                   <Text className="text-white text-sm ml-1 font-medium">
                     {likedPosts.has(post.id) ? post.likes + 1 : post.likes}
@@ -248,13 +285,14 @@ export default function Feed() {
               <TouchableOpacity onPress={() => toggleSave(post.id)}>
                 <Bookmark 
                   size={26} 
-                  color={savedPosts.has(post.id) ? '#7FFF00' : '#fff'} 
-                  fill={savedPosts.has(post.id) ? '#7FFF00' : 'transparent'}
+                  color={savedPosts.has(post.id) ? '#00FF40' : '#fff'} 
+                  fill={savedPosts.has(post.id) ? '#00FF40' : 'transparent'}
                 />
               </TouchableOpacity>
             </View>
           </View>
         ))}
+        <CreateModal visible={modalVisible} onClose={() => setModalVisible(false)} />
       </ScrollView>
     </SafeAreaView>
   );

@@ -1,3 +1,4 @@
+import ShareProfile from '@/src/components/share-profile';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { ChevronDown, Clapperboard, Grid3X3, Menu, Plus, Repeat2 } from 'lucide-react-native';
@@ -33,6 +34,7 @@ const ProfileScreen = () => {
   const [activeTab, setActiveTab] = useState<'posts' | 'klips' | 'republicados'>('posts');
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [isStoryModalVisible, setIsStoryModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const [hasStory, setHasStory] = useState(true); // Define se tem story ativo
   const [storyProgress] = useState(new Animated.Value(0));
   const [profileData, setProfileData] = useState<ProfileData>({
@@ -142,14 +144,14 @@ locations={[0, 0.3, 0.7, 1]}  start={{ x: 0, y: 0 }}
                   source={{ uri: profileData.avatar }}
                   className="w-32 h-32 rounded-full"
                 />
-                <View className="absolute bottom-0 right-0 bg-green-500 rounded-full p-2 border-4 border-black">
+                <View className="absolute bottom-0 right-0 bg-[#00FF40] rounded-full p-2 border-4 border-black">
                   <Plus size={20} color="white" />
                 </View>
               </View>
             )}
           </TouchableOpacity>
 
-          <Text className="text-green-500 text-3xl font-bold mb-1">
+          <Text className="text-[#00FF40] text-3xl font-bold mb-1">
             {profileData.username}
           </Text>
           <Text className="text-gray-400 text-base">
@@ -186,12 +188,12 @@ locations={[0, 0.3, 0.7, 1]}  start={{ x: 0, y: 0 }}
             onPress={() => setIsEditModalVisible(true)}
             className="flex-1 border-2  bg-[#25292e] rounded-xl py-3"
           >
-            <Text className="text-green-500 text-center font-semibold text-base">
+            <Text className="text-[#00FF40] text-center font-semibold text-base">
               Editar Perfil
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity className="flex-1 border-2 bg-[#25292e]  rounded-xl py-3">
-            <Text className="text-green-500 text-center font-semibold text-base">
+          <TouchableOpacity onPress={() => setModalVisible(true)} className="flex-1 border-2 bg-[#25292e]  rounded-xl py-3">
+            <Text className="text-[#00FF40] text-center font-semibold text-base">
               Compartilhar Perfil
             </Text>
           </TouchableOpacity>
@@ -202,7 +204,7 @@ locations={[0, 0.3, 0.7, 1]}  start={{ x: 0, y: 0 }}
           <TouchableOpacity
             onPress={() => setActiveTab('posts')}
             className={`flex-1 flex-row py-4 items-center justify-center ${
-              activeTab === 'posts' ? 'border-b-2 border-green-500' : ''
+              activeTab === 'posts' ? 'border-b-2 border-[#00FF40]' : ''
             }`}
           >
           
@@ -212,7 +214,7 @@ locations={[0, 0.3, 0.7, 1]}  start={{ x: 0, y: 0 }}
           <TouchableOpacity
             onPress={() => setActiveTab('klips')}
             className={`flex-1 py-4 flex-1 flex-row py-4 items-center justify-center ${
-              activeTab === 'klips' ? 'border-b-2 border-green-500' : ''
+              activeTab === 'klips' ? 'border-b-2 border-[#00FF40]' : ''
             }`}
           >
            
@@ -221,7 +223,7 @@ locations={[0, 0.3, 0.7, 1]}  start={{ x: 0, y: 0 }}
           <TouchableOpacity
             onPress={() => setActiveTab('republicados')}
             className={`flex-1 py-4 flex-1 flex-row py-4 items-center justify-center ${
-              activeTab === 'republicados' ? 'border-b-2 border-green-500' : ''
+              activeTab === 'republicados' ? 'border-b-2 border-[#00FF40]' : ''
             }`}
           >
            
@@ -262,7 +264,7 @@ locations={[0, 0.3, 0.7, 1]}  start={{ x: 0, y: 0 }}
                 source={{ uri: editForm.avatar }}
                 className="w-32 h-32 rounded-full mb-4"
               />
-              <Text className="text-green-500 text-2xl font-bold">
+              <Text className="text-[#00FF40] text-2xl font-bold">
                 {editForm.username}
               </Text>
               <Text className="text-gray-400 text-base">
@@ -324,14 +326,14 @@ locations={[0, 0.3, 0.7, 1]}  start={{ x: 0, y: 0 }}
               </View>
 
               <TouchableOpacity className="mb-6 border-t border-gray-700">
-                <Text className="text-gray-400 text-sm mb-2 mt-4 text-green-500">Mostrar selo de verificado no seu perfil</Text>
+                <Text className="text-gray-400 text-sm mb-2 mt-4 text-[#00FF40]">Mostrar selo de verificado no seu perfil</Text>
               </TouchableOpacity>
               
 
               {/* Botão Salvar */}
               <TouchableOpacity
                 onPress={handleSave}
-                className="bg-green-500 rounded-lg py-4 mb-4"
+                className="bg-[#00FF40] rounded-lg py-4 mb-4"
               >
                 <Text className="text-white text-center font-semibold text-base">
                   Salvar
@@ -436,6 +438,7 @@ locations={[0, 0.3, 0.7, 1]}  start={{ x: 0, y: 0 }}
           />
         </View>
       </Modal>
+      <ShareProfile profileUrl='https://teste.com' visible={modalVisible} onClose={() => setModalVisible(false)} />
     </View>
     </SafeAreaView>
   );

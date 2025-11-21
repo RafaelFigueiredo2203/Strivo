@@ -60,7 +60,7 @@ export default function ChatScreen() {
             
             {/* Avatar */}
             {conversation.hasStory ? (
-              <View className="rounded-full p-0.5 bg-green-500 mr-3">
+              <View className="rounded-full p-0.5 bg-[#00FF40] mr-3">
                 <View className="rounded-full p-0.5 bg-gray-900">
                   <Image
                     source={{ uri: conversation.avatar }}
@@ -85,13 +85,13 @@ export default function ChatScreen() {
 
           <View className="flex-row items-center gap-4">
             <TouchableOpacity>
-              <Phone size={22} color="#00ff88" />
+              <Phone size={22} color="#00FF40" />
             </TouchableOpacity>
             <TouchableOpacity>
-              <Video size={22} color="#00ff88" />
+              <Video size={22} color="#00FF40" />
             </TouchableOpacity>
             <TouchableOpacity>
-              <MoreVertical size={22} color="#00ff88" />
+              <MoreVertical size={22} color="#00FF40" />
             </TouchableOpacity>
           </View>
         </View>
@@ -113,7 +113,7 @@ export default function ChatScreen() {
             <View
               className={`px-4 py-2 rounded-2xl ${
                 message.sender === 'me'
-                  ? 'bg-green-600 rounded-br-md'
+                  ? 'bg-[#00FF40] rounded-br-md'
                   : 'bg-gray-800 rounded-bl-md'
               }`}
             >
@@ -122,7 +122,7 @@ export default function ChatScreen() {
             <View className={`flex-row items-center mt-1 ${message.sender === 'me' ? 'justify-end' : 'justify-start'}`}>
               <Text className="text-gray-500 text-xs mr-1">{message.time}</Text>
               {message.sender === 'me' && (
-                <CheckCheck size={14} color="#00ff88" />
+                <CheckCheck size={14} color="#00FF40" />
               )}
             </View>
           </View>
@@ -145,7 +145,7 @@ export default function ChatScreen() {
             onPress={handleSend}
             disabled={!inputText.trim()}
             className={`w-10 h-10 rounded-full flex items-center justify-center text-center ${
-              inputText.trim() ? 'bg-green-500' : 'bg-gray-700'
+              inputText.trim() ? 'bg-[#00FF40]' : 'bg-gray-700'
             }`}
           >
             <Send size={18} color={inputText.trim() ? '#000000' : '#6b7280'} />

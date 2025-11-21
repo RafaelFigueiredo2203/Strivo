@@ -267,8 +267,8 @@ const KlipsScreen = () => {
             >
               <Heart
                 size={16}
-                color={item.isLiked ? '#00FF7F' : '#fff'}
-                fill={item.isLiked ? '#00FF7F' : 'none'}
+                color={item.isLiked ? '#00FF40' : '#fff'}
+                fill={item.isLiked ? '#00FF40' : 'none'}
               />
             </TouchableOpacity>
             <Text style={{ color: '#9CA3AF', fontSize: 12 }}>{item.likes}</Text>
@@ -346,7 +346,7 @@ const KlipsScreen = () => {
               style={{
                 position: 'absolute',
                 bottom: -8,
-                backgroundColor: '#00FF7F',
+                backgroundColor: '#00FF40',
                 borderRadius: 12,
                 width: 24,
                 height: 24,
@@ -363,8 +363,8 @@ const KlipsScreen = () => {
         <TouchableOpacity onPress={toggleLike} style={{ alignItems: 'center', marginBottom: 24 }}>
           <Heart
             size={36}
-            color={item.isLiked ? '#00FF7F' : '#fff'}
-            fill={item.isLiked ? '#00FF7F' : 'none'}
+            color={item.isLiked ? '#00FF40' : '#fff'}
+            fill={item.isLiked ? '#00FF40' : 'none'}
             strokeWidth={1.5}
           />
           <Text style={{ color: 'white', fontSize: 13, fontWeight: '500', marginTop: 4 }}>
@@ -414,7 +414,7 @@ const KlipsScreen = () => {
             <TouchableOpacity
               onPress={toggleFollow}
               style={{
-                backgroundColor: '#00FF7F',
+                backgroundColor: '#00FF40',
                 paddingHorizontal: 20,
                 paddingVertical: 6,
                 borderRadius: 20,
@@ -550,7 +550,7 @@ const KlipsScreen = () => {
           />
           {commentText.trim( ) ? (
             <TouchableOpacity onPress={handleAddComment} style={{ marginLeft: 8 }}>
-              <Text style={{ color: '#00FF7F', fontWeight: '600', fontSize: 14 }}>Enviar</Text>
+              <Text style={{ color: '#00FF40', fontWeight: '600', fontSize: 14 }}>Enviar</Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity style={{ marginLeft: 8 }}>

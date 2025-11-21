@@ -54,7 +54,7 @@ export default function Configuration() {
       
       {/* Header */}
       <View className="flex-row items-center px-4 py-3 bg-black border-b border-zinc-900">
-        <TouchableOpacity className="mr-4" onPress={router.back}>
+        <TouchableOpacity className="mr-4" onPress={() => router.push('/screens/profile')}>
           <ArrowLeft size={24} color="#fff" />
         </TouchableOpacity>
         <Text className="text-white text-lg font-semibold">Configurações e atividade</Text>

@@ -77,11 +77,12 @@ export default function RootLayout() {
         />
         <Tabs.Screen
           name="screens/chat/chat-screen"
-          options={{ href: null }}
+          options={{ href: null,tabBarStyle: { display: 'none' } }}
         />
         <Tabs.Screen
           name="screens/chat/message-screen"
-          options={{ href: null }}
+          options={{ href: null , tabBarStyle: { display: 'none' }}}
+          
         />
         <Tabs.Screen
           name="screens/create-post"
@@ -89,7 +90,7 @@ export default function RootLayout() {
         />
         <Tabs.Screen
           name="screens/chat/new-chat-screen"
-          options={{ href: null }}
+          options={{ href: null,tabBarStyle: { display: 'none' } }}
         />
         <Tabs.Screen
           name="screens/chat-live"

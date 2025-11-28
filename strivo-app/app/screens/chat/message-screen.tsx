@@ -1,6 +1,7 @@
+import CreateGroup from '@/src/components/create-group';
 import { Conversation } from '@/src/utils/types/message';
 import { useRouter } from 'expo-router';
-import { ArrowLeft, Check, CheckCheck, Menu, Plus, Search } from 'lucide-react-native';
+import { ArrowLeft, Check, CheckCheck, Plus, Search } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { Image, ScrollView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
@@ -79,6 +80,7 @@ export default function MessagesScreen() {
   const [searchText, setSearchText] = useState<string>('');
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
   const navigation = useRouter();
+  const [modalVisible, setModalVisible] = useState(false);
 
   const filteredConversations = conversations.filter(conv =>
     conv.username.toLowerCase().includes(searchText.toLowerCase())
@@ -108,11 +110,9 @@ export default function MessagesScreen() {
             <Text className="text-white text-2xl font-semibold">Mensagens</Text>
           </View>
           <View className="flex-row items-center gap-5">
-            <TouchableOpacity>
-              <Search size={24} color="#00FF40" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Menu size={24} color="#00FF40" />
+         
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
+              <Plus size={24} color="#00FF40" />
             </TouchableOpacity>
           </View>
         </View>
@@ -157,6 +157,7 @@ export default function MessagesScreen() {
                 />
               )}
             </View>
+            
 
             {/* Message Info */}
             <View className="flex-1 flex-row items-center justify-between">
@@ -192,15 +193,10 @@ export default function MessagesScreen() {
           </TouchableOpacity>
         ))}
       </ScrollView>
+       
 
-      {/* Floating Action Button - Nova Conversa */}
-      <TouchableOpacity
-        className="absolute bottom-6 right-6 bg-[#00FF40] w-14 h-14 rounded-full items-center justify-center shadow-lg"
-        activeOpacity={0.8}
-        onPress={() => navigation.navigate('/screens/chat/new-chat-screen')}
-      >
-        <Plus size={28} color="#000000" />
-      </TouchableOpacity>
+         <CreateGroup visible={modalVisible} onClose={() => setModalVisible(false)} />
+
     </View>
   );
 }

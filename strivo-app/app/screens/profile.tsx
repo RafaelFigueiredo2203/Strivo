@@ -1,7 +1,7 @@
 import ShareProfile from '@/src/components/share-profile';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { ChevronDown, Clapperboard, Grid3X3, Menu, Plus, Repeat2 } from 'lucide-react-native';
+import { AlignStartVertical, ChevronDown, Clapperboard, Grid3X3, Menu, Plus, Repeat2 } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import {
   Animated,
@@ -38,9 +38,9 @@ const ProfileScreen = () => {
   const [hasStory, setHasStory] = useState(true); // Define se tem story ativo
   const [storyProgress] = useState(new Animated.Value(0));
   const [profileData, setProfileData] = useState<ProfileData>({
-    username: 'strivo',
+    username: 'rafafiguei',
     name: 'Rafa Figueiredo',
-    bio: 'Connecting creators',
+    bio: 'Criador de Conteúdo na Strivo',
     website: 'www.strivo.com',
     followers: '1,8M',
     following: '103',
@@ -82,7 +82,7 @@ const ProfileScreen = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
       <View className="bg-black px-6 py-3 rounded-lg mb-4 flex flex-row w-full justify-between items-end">
         <View className='flex flex-row items-start'>
-        <Text className='text-white text-3xl font-bold '>strivo </Text>
+        <Text className='text-white text-3xl font-bold '><AlignStartVertical color="#fff" className='text-white'/> </Text>
         <ChevronDown color="#fff" size={18} style={{marginTop:6}}/> <View className='bg-red-500 rounded-full p-1 mt-3'/>
         </View>
         <TouchableOpacity
@@ -151,11 +151,11 @@ locations={[0, 0.3, 0.7, 1]}  start={{ x: 0, y: 0 }}
             )}
           </TouchableOpacity>
 
-          <Text className="text-[#00FF40] text-3xl font-bold mb-1">
-            {profileData.username}
+          <Text className="text-[#ffffff] text-3xl font-bold mb-1">
+            {profileData.name}
           </Text>
           <Text className="text-gray-400 text-base">
-            {profileData.bio}
+            {profileData.username}
           </Text>
         </View>
 
@@ -183,7 +183,7 @@ locations={[0, 0.3, 0.7, 1]}  start={{ x: 0, y: 0 }}
         </View>
 
         {/* Botões de Ação */}
-        <View className="flex-row justify-center gap-4 px-6 mb-6">
+        <View className="flex-row justify-center gap-4 px-6 mb-2">
           <TouchableOpacity
             onPress={() => setIsEditModalVisible(true)}
             className="flex-1 border-2  bg-[#25292e] rounded-xl py-3"

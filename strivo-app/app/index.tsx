@@ -2,7 +2,7 @@
 import CreateModal from '@/src/components/create-post';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { Bookmark, Heart, MessageCircle, Plus, Share2 } from 'lucide-react-native';
+import { Bell, Bookmark, Heart, MessageCircle, MessageSquareMoreIcon, Plus, Share2 } from 'lucide-react-native';
 import React, { useState } from 'react';
 import {
   Dimensions,
@@ -136,10 +136,10 @@ export default function Feed() {
             <Plus size={28} color="#fff" />
           </TouchableOpacity>
           <TouchableOpacity>
-            <Heart size={28} color="#fff" />
+            <Bell size={28} color="#fff" />
           </TouchableOpacity>
           <TouchableOpacity className="relative" onPress={() => navigation.push('/screens/chat/message-screen')}>
-            <MessageCircle size={28} color="#fff" />
+            <MessageSquareMoreIcon size={28} color="#fff" />
             <View className="absolute -top-1 -right-1 bg-red-600 rounded-full w-5 h-5 items-center justify-center">
               <Text className="text-white text-xs font-bold">3</Text>
             </View>
@@ -183,9 +183,7 @@ export default function Feed() {
                         className="w-16 h-16 rounded-full"
                         style={{ borderWidth: 2, borderColor: 'black' }}
                       />
-                      <View className="absolute bottom-0 right-0 bg-[#00FF40] rounded-full w-5 h-5 items-center justify-center">
-                        <Plus size={16} color="#000" strokeWidth={3} />
-                      </View>
+
                     </View>
                   </View>
                 </LinearGradient>
@@ -211,18 +209,42 @@ export default function Feed() {
           <View key={post.id} className="mb-1">
             {/* Post Header */}
             <View className="flex-row items-center justify-between px-3 py-2">
-              <View className="flex-row items-center flex-1">
-                <Image
-                  source={{ uri: post.userAvatar }}
-                  className="w-10 h-10 rounded-full border-2 border-[#00FF40]"
-                />
+             <View className="flex-row items-center flex-1">
+                <LinearGradient
+                  colors={['#16a34a', '#4ade80', '#d3ef86', '#16a32d']}
+                  locations={[0, 0.3, 0.7, 1]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={{
+                    padding: 2,
+                    borderRadius: 9999,
+                    shadowColor: '#22c55e',
+                    shadowOffset: { width: 0, height: 0 },
+                    shadowOpacity: 0.6,
+                    shadowRadius: 10,
+                    elevation: 8,
+                  }}
+                >
+                  <View style={{ 
+                    backgroundColor: 'black', 
+                    borderRadius: 9999, 
+                    padding: 2 
+                  }}>
+                    <Image
+                      source={{ uri: post.userAvatar }}
+                      className="w-10 h-10 rounded-full"
+                      style={{ borderWidth: 2, borderColor: 'black' }}
+                    />
+                  </View>
+                </LinearGradient>
+                
                 <View className="ml-3 flex-1">
                   <Text className="text-white font-semibold text-sm">
                     {post.username}
                   </Text>
                   <View className="flex-row items-center">
                     <Text className="text-gray-400 text-xs" numberOfLines={1}>
-                      🎵 {post.music}
+                      Rafael Figueiredo
                     </Text>
                   </View>
                 </View>

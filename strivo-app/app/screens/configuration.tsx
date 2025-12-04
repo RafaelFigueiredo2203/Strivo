@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { Archive, ArrowLeft, AtSign, Ban, Briefcase, CheckCircle, ChevronRight, Database, Download, Expand, Eye, FileQuestion, Image, MessageCircle, MessageSquare, Monitor, Palette, Share2, Users, Zap } from 'lucide-react-native';
+import { Archive, ArrowLeft, Ban, Briefcase, CheckCircle, ChevronRight, Database, Download, Expand, Eye, FileQuestion, Image, MessageCircle, MessageSquare, Monitor, Palette, Share2, Zap } from 'lucide-react-native';
 import React from 'react';
 import { ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -66,14 +66,12 @@ export default function Configuration() {
           <MenuItem 
             icon={<Image size={24} color="#fff" />}
             title="Conteúdo Curtido"
+            onPress={() => router.push('/screens/configs/liked-content')}
           />
           <MenuItem 
             icon={<Archive size={24} color="#fff" />}
             title="Itens Arquivados"
-          />
-          <MenuItem 
-            icon={<Share2 size={24} color="#fff" />}
-            title="Republicados"
+            onPress={() => router.push('/screens/configs/items-archived')}
           />
         </Section>
 
@@ -81,12 +79,8 @@ export default function Configuration() {
         <Section title="Seu conteúdo">
           <MenuItem 
             icon={<Eye size={24} color="#fff" />}
-            title="Visibilidade do Perfil"
-            onPress={() => router.push('/screens/account-privacy')}
-          />
-          <MenuItem 
-            icon={<Users size={24} color="#fff" />}
-            title="Melhores Amigos"
+            title="Privacidade da conta"
+            onPress={() => router.push('/screens/configs/account-privacy')}
           />
           <MenuItem 
             icon={<Ban size={24} color="#fff" />}
@@ -95,6 +89,7 @@ export default function Configuration() {
           <MenuItem 
             icon={<Monitor size={24} color="#fff" />}
             title="Gerenciar Visualizações"
+            onPress={() => router.push('/screens/configs/views-manage')}
           />
         </Section>
 
@@ -105,16 +100,14 @@ export default function Configuration() {
             title="Respostas ao Story"
           />
           <MenuItem 
-            icon={<AtSign size={24} color="#fff" />}
-            title="Menções diretas"
-          />
-          <MenuItem 
             icon={<MessageSquare size={24} color="#fff" />}
             title="Comentários"
+            onPress={() => router.push('/screens/configs/comments')}
           />
           <MenuItem 
             icon={<Share2 size={24} color="#fff" />}
             title="Compartilhamento"
+            onPress={() => router.push('/screens/configs/comp-screen')}
           />
         </Section>
 
@@ -150,11 +143,18 @@ export default function Configuration() {
           />
         </Section>
 
-        <Section title="Atualizações da Strivo">
+        <Section title="Aprimore a Strivo">
           <MenuItem 
             icon={<FileQuestion size={24} color="#fff" />}
-            title="Enviar sugestões para a Strivo"
+            title="Enviar Sugestão"
           />
+          <MenuItem 
+            icon={<Expand size={24} color="#fff" />}
+            title="Relatar Problema"
+          />
+        </Section>
+
+        <Section title="Atualizações da Strivo">
           <MenuItem 
             icon={<Expand size={24} color="#fff" />}
             title="Experiência antecipada da Strivo"

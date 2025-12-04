@@ -1,5 +1,5 @@
 // App.tsx
-import CreateModal from '@/src/components/create-post';
+import FeedOptions from '@/src/components/feed-options';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Bell, Bookmark, Heart, MessageCircle, MessageSquareMoreIcon, Plus, Share2 } from 'lucide-react-native';
@@ -249,18 +249,12 @@ export default function Feed() {
                   </View>
                 </View>
               </View>
-              
+
               <TouchableOpacity 
-                onPress={() => toggleFollow(post.id)}
-                className={`px-4 py-1.5 rounded-md ${
-                  followingUsers.has(post.id) ? 'bg-gray-700' : 'bg-[#00FF40]'
-                }`}
+                onPress={() => setModalVisible(true)}
+                className='flex items-start justify-start text-start'
               >
-                <Text className={`font-semibold text-sm ${
-                  followingUsers.has(post.id) ? 'text-white' : 'text-black'
-                }`}>
-                  {followingUsers.has(post.id) ? 'Seguindo' : 'Seguir'}
-                </Text>
+               <Text className='text-white text-4xl mt-[-6px]'>...</Text>
               </TouchableOpacity>
             </View>
 
@@ -314,7 +308,7 @@ export default function Feed() {
             </View>
           </View>
         ))}
-        <CreateModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+        <FeedOptions visible={modalVisible} onClose={() => setModalVisible(false)} />
       </ScrollView>
     </SafeAreaView>
   );

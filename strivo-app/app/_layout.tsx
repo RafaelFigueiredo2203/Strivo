@@ -71,8 +71,33 @@ export default function RootLayout() {
           options={{ href: null}}
         />
         <Tabs.Screen
-          name="screens/account-privacy"
-          options={{ href: null }}
+          name="screens/configs/account-privacy"
+          options={{ href: null, tabBarStyle: { display: 'none' }  }}
+          
+        />
+        <Tabs.Screen
+          name="screens/configs/comp-screen"
+          options={{ href: null, tabBarStyle: { display: 'none' }  }}
+          
+        />
+        <Tabs.Screen
+          name="screens/configs/comments"
+          options={{ href: null, tabBarStyle: { display: 'none' }  }}
+          
+        />
+        <Tabs.Screen
+          name="screens/configs/views-manage"
+          options={{ href: null, tabBarStyle: { display: 'none' }  }}
+          
+        />
+        <Tabs.Screen
+          name="screens/configs/liked-content"
+          options={{ href: null, tabBarStyle: { display: 'none' }  }}
+          
+        />
+        <Tabs.Screen
+          name="screens/configs/items-archived"
+          options={{ href: null, tabBarStyle: { display: 'none' }  }}
           
         />
         <Tabs.Screen

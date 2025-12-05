@@ -1,6 +1,6 @@
 # TODO - Status do Frontend Strivo
 
-**Última atualização:** Janeiro 2025
+**Última atualização:** 04/12/2025
 
 ---
 

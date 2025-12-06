@@ -67,6 +67,16 @@ export default function RootLayout() {
           
         />
         <Tabs.Screen
+          name="screens/story-screen"
+          options={{ href: null, tabBarStyle: { display: 'none' }  }}
+          
+        />
+        <Tabs.Screen
+          name="screens/notifications"
+          options={{ href: null, tabBarStyle: { display: 'none' }  }}
+          
+        />
+        <Tabs.Screen
           name="screens/configuration"
           options={{ href: null}}
         />
@@ -106,6 +116,11 @@ export default function RootLayout() {
         />
         <Tabs.Screen
           name="screens/chat/message-screen"
+          options={{ href: null , tabBarStyle: { display: 'none' }}}
+          
+        />
+        <Tabs.Screen
+          name="screens/chat/messa-actions-menu"
           options={{ href: null , tabBarStyle: { display: 'none' }}}
           
         />

@@ -1,36 +1,33 @@
-import { useRouter } from 'expo-router';
-import { Clapperboard, Grid3x3, PlusCircleIcon } from 'lucide-react-native';
+import { AlertCircle, AlertCircleIcon, HeartOff, Save, Settings2 } from 'lucide-react-native';
 import React, { useEffect, useRef } from 'react';
 import { Animated, Dimensions, Modal, PanResponder, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-interface CreateModalProps {
+interface FeedOptionsProps {
   visible: boolean;
   onClose: () => void;
 }
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-const CreateModal = ({ visible, onClose }: CreateModalProps) => {
+const FeedOptions = ({ visible, onClose }: FeedOptionsProps) => {
   const translateY = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
-  const onCloseRef = useRef(onClose); // Guarda referência atualizada
-  const navigation = useRouter();
-  
-  // Atualiza a referência sempre que onClose mudar
-  useEffect(() => {
-    onCloseRef.current = onClose;
-  }, [onClose]);
 
   // Anima quando visible muda
   useEffect(() => {
     if (visible) {
+      // Garante que começa de baixo e anima para cima
+      translateY.setValue(SCREEN_HEIGHT);
       Animated.spring(translateY, {
         toValue: 0,
         useNativeDriver: true,
         tension: 50,
         friction: 8,
       }).start();
+    } else {
+      // Quando fechar, reseta para baixo
+      translateY.setValue(SCREEN_HEIGHT);
     }
-  }, [visible]);
+  }, [visible, translateY]);
 
   const closeModal = () => {
     Animated.timing(translateY, {
@@ -38,9 +35,7 @@ const CreateModal = ({ visible, onClose }: CreateModalProps) => {
       duration: 300,
       useNativeDriver: true,
     }).start(() => {
-      if (onCloseRef.current) { // Usa a referência atualizada
-        onCloseRef.current();
-      }
+      onClose();
     });
   };
 
@@ -71,10 +66,14 @@ const CreateModal = ({ visible, onClose }: CreateModalProps) => {
   ).current;
 
   const mockItems = [
-    { id: 1, icon: Clapperboard, label: 'Klips',  },
-    { id: 2, icon: Grid3x3, label: 'Post',  },
-    { id: 3, icon: PlusCircleIcon, label: 'Story',  },
+    { id: 1, label: 'Salvar Conteúdo', icon: Save },
+    { id: 2, label: 'Qualidade', icon: Settings2 },
+    { id: 3, label: 'Não mostrar mais esse perfil', icon: AlertCircleIcon },
+    { id: 4, label: 'Não tenho interesse ', icon: HeartOff },
+    { id: 5, label: 'Denunciar Conteúdo', icon: AlertCircle },
   ];
+
+  if (!visible) return null; // ← ADICIONE ISSO!
 
   return (
     <Modal
@@ -82,6 +81,7 @@ const CreateModal = ({ visible, onClose }: CreateModalProps) => {
       transparent
       animationType="none"
       onRequestClose={closeModal}
+      statusBarTranslucent
     >
       <View style={styles.container}>
         {/* Backdrop */}
@@ -108,7 +108,6 @@ const CreateModal = ({ visible, onClose }: CreateModalProps) => {
 
           {/* Title */}
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>Criar</Text>
           </View>
 
           {/* Options */}
@@ -119,19 +118,12 @@ const CreateModal = ({ visible, onClose }: CreateModalProps) => {
                 <TouchableOpacity
                   key={item.id}
                   onPress={() => {
-                    if(item.label === 'Story'){
-                    navigation.push('/screens/story-screen')
-                    }
                     console.log(`${item.label} clicado`);
                     closeModal();
                   }}
                   style={styles.optionButton}
                 >
-                  <View
-                    style={[
-                      styles.iconContainer, 
-                    ]}
-                  >
+                  <View style={styles.iconContainer}>
                     <Icon color="white" size={24} />
                   </View>
                   <Text style={styles.optionText}>{item.label}</Text>
@@ -161,6 +153,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#171d25',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
+    paddingBottom: 20, // Adiciona espaço para safe area
   },
   handleContainer: {
     alignItems: 'center',
@@ -201,6 +194,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,
+    backgroundColor: '#1F2937',
   },
   optionText: {
     color: 'white',
@@ -208,4 +202,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateModal;
+export default FeedOptions;

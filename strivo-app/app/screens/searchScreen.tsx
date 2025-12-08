@@ -112,7 +112,7 @@ export default function SearchScreen() {
       <StatusBar barStyle="light-content" backgroundColor="#000" />
 
       {/* Search Bar */}
-      <View className="px-4 py-3 bg-black border-b border-gray-800">
+      <View className="px-4 py-3 bg-black border-b border-gray-800 mt-4">
         <View className="flex-row items-center bg-gray-900 rounded-full px-4 py-2">
           <Search size={20} color="#6b7280" />
           <TextInput
@@ -137,11 +137,11 @@ export default function SearchScreen() {
         {!isSearching ? (
           // Estado inicial - sem pesquisa
           <View className="flex-1 items-center justify-center px-6 py-20">
-            <Search size={64} color="#374151" strokeWidth={1.5} />
-            <Text className="text-gray-400 text-lg mt-4 text-center">
+            <Search size={64} color="#7FFF00" strokeWidth={1.5} />
+            <Text className="text-[#7FFF00]/80 text-lg mt-4 text-center">
               Pesquise por contas e hashtags
             </Text>
-            <Text className="text-gray-600 text-sm mt-2 text-center">
+            <Text className="text-[#7FFF00]/50 text-sm mt-2 text-center">
               Encontre pessoas e tópicos que você gosta
             </Text>
           </View>

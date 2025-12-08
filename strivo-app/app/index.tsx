@@ -1,4 +1,5 @@
 // App.tsx
+import CreateModal from '@/src/components/create-post';
 import FeedOptions from '@/src/components/feed-options';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -41,6 +42,8 @@ export default function Feed() {
   const [followingUsers, setFollowingUsers] = useState<Set<number>>(new Set());
   const navigation = useRouter();
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalCreateVisible, setModalCreateVisible] = useState(false);
+
   const router = useRouter();
   const stories: Story[] = [
     { 
@@ -132,10 +135,10 @@ export default function Feed() {
       <View className="flex-row justify-between items-center px-4 py-3 bg-black">
         <Text className="text-[#00FF40] text-3xl font-bold">Strivo</Text>
         <View className="flex-row items-center gap-4">
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <TouchableOpacity onPress={() => setModalCreateVisible(true)}>
             <Plus size={28} color="#fff" />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.push('/screens/notifications')}>
             <Bell size={28} color="#fff" />
           </TouchableOpacity>
           <TouchableOpacity className="relative" onPress={() => navigation.push('/screens/chat/message-screen')}>
@@ -262,7 +265,7 @@ export default function Feed() {
             <Image
               source={{ uri: post.image }}
               className="w-full"
-              style={{ height: SCREEN_HEIGHT * 0.6 }}
+              style={{ height: SCREEN_HEIGHT * 0.4 }}
               resizeMode="cover"
             />
 
@@ -309,6 +312,7 @@ export default function Feed() {
           </View>
         ))}
         <FeedOptions visible={modalVisible} onClose={() => setModalVisible(false)} />
+        <CreateModal visible={modalCreateVisible} onClose={() => setModalCreateVisible(false)} />
       </ScrollView>
     </SafeAreaView>
   );

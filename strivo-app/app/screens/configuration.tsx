@@ -131,6 +131,7 @@ export default function Configuration() {
           />
         </Section>
 
+
         {/* Suas métricas e ferramentas */}
         <Section title="Suas métricas e ferramentas">
           <MenuItem 
@@ -162,6 +163,33 @@ export default function Configuration() {
         </Section>
 
         <View className="h-8" />
+        {/* Central de Conta */}
+          <View className="mt-10 px-4">
+            <Text className="text-white font-semibold text-base mb-3">
+              Central de Conta
+            </Text>
+
+            {/* Criar Conta */}
+            <TouchableOpacity
+              className="py-3 rounded-xl items-center justify-center mb-3"
+              onPress={() => {}}
+            >
+              <Text className="text-[#00ff9d] text-base font-semibold">
+                Criar Conta
+              </Text>
+            </TouchableOpacity>
+
+            {/* Sair da sua conta */}
+            <TouchableOpacity
+              className="py-3 rounded-xl items-center justify-center"
+              onPress={() => console.log('logout')}
+            >
+              <Text className="text-red-500 text-base font-semibold">
+                Sair da sua Conta
+              </Text>
+            </TouchableOpacity>
+          </View>
+
       </ScrollView>
     </SafeAreaView>
   );

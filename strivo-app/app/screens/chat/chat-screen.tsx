@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { ArrowLeft, CheckCheck, MoreVertical, Phone, Send, Video } from 'lucide-react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import MessageActionsMenu from './messa-actions-menu';
 
 
 export default function ChatScreen() {
@@ -21,14 +22,18 @@ export default function ChatScreen() {
   } 
 
   const navigation = useRouter();
-
+  const [showActions, setShowActions] = useState(false);
+  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [messages, setMessages] = useState<Message[]>(conversation.messages || []);
   const [inputText, setInputText] = useState<string>('');
   const scrollViewRef = useRef<ScrollView>(null);
 
-  useEffect(() => {
-    scrollViewRef.current?.scrollToEnd({ animated: true });
-  }, [messages]);
+  const openMenu = (msg: Message) => {
+  setSelectedMessage(msg);
+  setShowActions(true);
+ };
+
+  
 
   const handleSend = () => {
     if (inputText.trim()) {
@@ -43,6 +48,10 @@ export default function ChatScreen() {
     }
   };
 
+  useEffect(() => {
+    scrollViewRef.current?.scrollToEnd({ animated: true });
+  }, [messages]);
+  
   return (
     <KeyboardAvoidingView 
       className="flex-1 bg-black"
@@ -104,8 +113,11 @@ export default function ChatScreen() {
         contentContainerStyle={{ paddingBottom: 20 }}
       >
         {messages.map((message) => (
-          <View
+          <TouchableOpacity
             key={message.id}
+            activeOpacity={0.9}
+            onLongPress={() => openMenu(message)}
+            delayLongPress={200}
             className={`mb-3 max-w-[75%] ${
               message.sender === 'me' ? 'self-end' : 'self-start'
             }`}
@@ -125,13 +137,13 @@ export default function ChatScreen() {
                 <CheckCheck size={14} color="#00FF40" />
               )}
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
 
       {/* Input */}
       <View className="px-4 py-3 bg-gray-900 border-t border-gray-800">
-        <View className="flex-row items-start  bg-gray-800 rounded-full px-4 py-2">
+        <View className="flex-row items-start  bg-gray-800 rounded-full px-4 py-2 mb-4">
           <TextInput
             placeholder="Mensagem..."
             placeholderTextColor="#6b7280"
@@ -152,6 +164,26 @@ export default function ChatScreen() {
           </TouchableOpacity>
         </View>
       </View>
+      <MessageActionsMenu
+        visible={showActions}
+        onClose={() => setShowActions(false)}
+        onReply={() => {
+          console.log("Responder", selectedMessage);
+          setShowActions(false);
+        }}
+        onShare={() => {
+          console.log("Compartilhar");
+          setShowActions(false);
+        }}
+        onDeleteForYou={() => {
+          console.log("Apagar pra você");
+          setShowActions(false);
+        }}
+        onDeleteForAll={() => {
+          console.log("Apagar para todos");
+          setShowActions(false);
+        }}
+      />
     </KeyboardAvoidingView>
   );
 }

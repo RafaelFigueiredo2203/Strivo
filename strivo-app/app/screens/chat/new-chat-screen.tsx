@@ -44,7 +44,7 @@ export default function NewChatScreen() {
       {/* Header */}
       <View className="px-4 pt-12 pb-4 bg-black border-b border-gray-800">
         <View className="flex-row items-center mb-4">
-          <TouchableOpacity className="mr-4" onPress={() => navigation.back()}>
+          <TouchableOpacity className="mr-4" onPress={() => navigation.push('/screens/chat/message-screen')}>
             <ArrowLeft size={26} color="#ffffff" />
           </TouchableOpacity>
           <Text className="text-white text-2xl font-semibold">Nova Conversa</Text>

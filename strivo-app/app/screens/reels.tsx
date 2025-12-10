@@ -5,7 +5,6 @@ import {
   MessageCircle,
   MoreVertical,
   Plus,
-  Send,
   Share2,
   ThumbsDown,
   Volume2,
@@ -684,160 +683,166 @@ const KlipsScreen = () => {
       />
 
       {/* Comments Modal */}
+      {/* Comments Modal */}
       <Modal
         visible={showComments}
         animationType="slide"
         onRequestClose={() => setShowComments(false)}
+        transparent={true}
       >
+        <TouchableOpacity
+          style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' }}
+          activeOpacity={1}
+          onPress={() => {
+            Keyboard.dismiss();
+            setShowComments(false);
+          }}
+        />
+
         <KeyboardAvoidingView
-            style={{ flex: 1 }}
-            behavior={Platform.OS === "ios" ? "padding" : undefined}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={0}
+        >
+          <View
+            style={{
+              backgroundColor: '#1F1F1F',
+              borderTopLeftRadius: 12,
+              borderTopRightRadius: 12,
+              height: SCREEN_HEIGHT * 0.65,
+            }}
           >
-          <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
-            <TouchableOpacity
-              style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' }}
-              activeOpacity={1}
-              onPress={() => setShowComments(false)}
-            />
+            {/* Header */}
             <View
               style={{
-                backgroundColor: '#1a1a1a',
-                height: SCREEN_HEIGHT * 0.7,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingVertical: 12,
+                borderBottomWidth: 0.5,
+                borderBottomColor: '#2a2a2a',
+                position: 'relative',
               }}
             >
-              {/* Header */}
               <View
                 style={{
+                  width: 36,
+                  height: 4,
+                  backgroundColor: '#3a3a3a',
+                  borderRadius: 2,
+                  position: 'absolute',
+                  top: 8,
+                }}
+              />
+              <Text style={{ color: '#A0A0A0', fontWeight: '600', fontSize: 15, marginTop: 12 }}>
+                Comentários
+              </Text>
+            </View>
+
+            {/* Comments List */}
+            <FlatList
+              data={comments}
+              renderItem={renderComment}
+              keyExtractor={(item) => item.id}
+              style={{ flex: 1 }}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: 8 }}
+            />
+
+            {/* Preview da imagem selecionada */}
+            {selectedImage && (
+              <View style={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 8, backgroundColor: '#1F1F1F' }}>
+                <View style={{ position: 'relative', width: 80 }}>
+                  <Image
+                    source={{ uri: selectedImage }}
+                    style={{ width: 80, height: 80, borderRadius: 8 }}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setSelectedImage(null)}
+                    style={{
+                      position: 'absolute',
+                      top: -6,
+                      right: -6,
+                      backgroundColor: '#000',
+                      borderRadius: 12,
+                      padding: 4,
+                    }}
+                  >
+                    <X size={14} color="#fff" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+
+            {/* Comment Input */}
+            <View
+              style={{
+                paddingHorizontal: 12,
+                paddingVertical: 10,
+                paddingBottom: Platform.OS === 'ios' ? 10 : 10,
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: '#1F1F1F',
+                borderTopWidth: 0.5,
+                borderTopColor: '#2a2a2a',
+              }}
+            >
+              <Image
+                source={{ uri: 'https://i.pravatar.cc/150?img=20' }}
+                style={{ width: 32, height: 32, borderRadius: 16, marginRight: 10 }}
+              />
+
+              <View
+                style={{
+                  flex: 1,
                   flexDirection: 'row',
                   alignItems: 'center',
-                  justifyContent: 'space-between',
-                  paddingHorizontal: 16,
-                  paddingVertical: 16,
-                  borderBottomWidth: 1,
-                  borderBottomColor: '#2a2a2a',
+                  backgroundColor: '#2a2a2a',
+                  borderRadius: 24,
+                  borderWidth: 1,
+                  borderColor: '#3a3a3a',
+                  paddingHorizontal: 14,
+                  paddingVertical: 8,
                 }}
               >
-                <Text style={{ color: 'white', fontWeight: '600', fontSize: 20 }}>
-                  Comentários
-                </Text>
+                <TextInput
+                  value={commentText}
+                  onChangeText={setCommentText}
+                  placeholder="Comente..."
+                  placeholderTextColor="#6B7280"
+                  style={{
+                    flex: 1,
+                    color: 'white',
+                    fontSize: 14,
+                    paddingVertical: 0,
+                  }}
+                  onFocus={() => setIsCommentInputFocused(true)}
+                  onBlur={() => setIsCommentInputFocused(false)}
+                  onSubmitEditing={handleAddComment}
+                  multiline={false}
+                />
+
                 <TouchableOpacity
-                  onPress={() => setShowComments(false)}
-                  style={{ padding: 4 }}
+                  style={{ marginLeft: 8 }}
+                  onPress={() => setSelectedImage('https://picsum.photos/400/300')}
                 >
-                  <X size={24} color="#9CA3AF" />
+                  <Camera size={18} color="#9CA3AF" />
                 </TouchableOpacity>
               </View>
 
-              {/* Comments List */}
-              <FlatList
-                data={comments}
-                renderItem={renderComment}
-                keyExtractor={(item) => item.id}
-                style={{ flex: 1 }}
-                showsVerticalScrollIndicator={false}
-              />
-
-              {/* Preview da imagem selecionada */}
-              {selectedImage && (
-                <View style={{ 
-                  paddingHorizontal: 16, 
-                  paddingTop: 12,
-                  borderTopWidth: 1,
-                  borderTopColor: '#2a2a2a',
-                }}>
-                  <View style={{ position: 'relative' }}>
-                    <Image
-                      source={{ uri: selectedImage }}
-                      style={{ width: 80, height: 80, borderRadius: 8 }}
-                    />
-                    <TouchableOpacity
-                      onPress={() => setSelectedImage(null)}
-                      style={{
-                        position: 'absolute',
-                        top: -8,
-                        right: -8,
-                        backgroundColor: '#1a1a1a',
-                        borderRadius: 12,
-                        padding: 4,
-                      }}
-                    >
-                      <X size={16} color="#fff" />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              )}
-
-              {/* Comment Input */}
-             <View
-              style={{
-                position: "absolute",
-                bottom: keyboardHeight, // <-- acompanha o teclado
-                left: 0,
-                right: 0,
-                paddingHorizontal: 16,
-                paddingVertical: 12,
-                flexDirection: "row",
-                alignItems: "center",
-                backgroundColor: "#1a1a1a",
-                borderTopWidth: 1,
-                borderTopColor: "#2a2a2a",
-              }}
-            >
-                <Image
-                  source={{ uri: 'https://i.pravatar.cc/150?img=20' }}
-                  style={{ width: 36, height: 36, borderRadius: 18, marginRight: 12 }}
-                />
-                
-                <View
+              {(commentText.trim() || selectedImage) && (
+                <TouchableOpacity
+                  onPress={handleAddComment}
                   style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    backgroundColor: '#2a2a2a',
-                    borderRadius: 20,
-                    paddingHorizontal: 16,
-                    paddingVertical: 8,
+                    marginLeft: 10,
                   }}
                 >
-                  <TextInput
-                    value={commentText}
-                    onChangeText={setCommentText}
-                    placeholder="Comente..."
-                    placeholderTextColor="#00FF40"
-                    style={{
-                      flex: 1,
-                      color: 'white',
-                      fontSize: 14,
-                    }}
-                    onFocus={() => setIsCommentInputFocused(true)}
-                    onBlur={() => setIsCommentInputFocused(false)}
-                    onSubmitEditing={handleAddComment}
-                  />
-                  
-                  <TouchableOpacity 
-                    style={{ marginLeft: 8 }}
-                    onPress={() => setSelectedImage('https://picsum.photos/400/300')}
-                  >
-                    <Camera size={20} color="#9CA3AF" />
-                  </TouchableOpacity>
-                </View>
-
-                {(commentText.trim() || selectedImage) && (
-                  <TouchableOpacity 
-                    onPress={handleAddComment} 
-                    style={{ 
-                      marginLeft: 12,
-                      backgroundColor: '#00FF40',
-                      borderRadius: 20,
-                      padding: 8,
-                    }}
-                  >
-                    <Send size={18} color="#000" fill="#000" />
-                  </TouchableOpacity>
-                )}
-              </View>
+                  <Text style={{ color: '#00FF40', fontWeight: '600', fontSize: 15 }}>
+                    Enviar
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
-          </SafeAreaView>
+          </View>
         </KeyboardAvoidingView>
       </Modal>
 

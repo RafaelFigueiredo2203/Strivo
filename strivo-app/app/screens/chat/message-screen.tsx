@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { ArrowLeft, Check, CheckCheck, Plus, Search } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { Image, ScrollView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import NewGroupModal from './group/new-modal';
 
 
 const initialConversations: Conversation[] = [
@@ -81,6 +82,7 @@ export default function MessagesScreen() {
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
   const navigation = useRouter();
   const [modalVisible, setModalVisible] = useState(false);
+  const [isGroupModalVisible, setIsGroupModalVisible] = useState(false);
 
   const filteredConversations = conversations.filter(conv =>
     conv.username.toLowerCase().includes(searchText.toLowerCase())
@@ -195,7 +197,19 @@ export default function MessagesScreen() {
       </ScrollView>
        
 
-         <CreateGroup visible={modalVisible} onClose={() => setModalVisible(false)} />
+         <CreateGroup 
+          setIsGroupModalVisible={() => {
+            setModalVisible(false);
+            setTimeout(() => setIsGroupModalVisible(true), 50);
+          }} 
+          visible={modalVisible} 
+          onClose={() => setModalVisible(false)} 
+        />
+
+        <NewGroupModal
+          visible={isGroupModalVisible}
+          onClose={() => setIsGroupModalVisible(false)}
+        />
 
     </View>
   );

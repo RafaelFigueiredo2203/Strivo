@@ -1,7 +1,7 @@
 import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 import { Camera, Circle, RefreshCw, RotateCw, Send, Type, X } from 'lucide-react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Alert, Image, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 export default function StoryCamera() {
@@ -12,12 +12,6 @@ export default function StoryCamera() {
   const cameraRef = useRef<CameraView>(null);
   const navigation = useRouter();
 
-
-  useEffect(() => {
-    if (!permission?.granted) {
-      requestPermission();
-    }
-  }, []);
 
   const onCameraReady = () => {
     setIsCameraReady(true);

@@ -86,6 +86,31 @@ export default function RootLayout() {
           
         />
         <Tabs.Screen
+          name="screens/chat/group/new-modal"
+          options={{ href: null, tabBarStyle: { display: 'none' }  }}
+          
+        />
+        <Tabs.Screen
+          name="screens/chat/group/new-group"
+          options={{ href: null, tabBarStyle: { display: 'none' }  }}
+          
+        />
+        <Tabs.Screen
+          name="screens/chat/group/add-members"
+          options={{ href: null, tabBarStyle: { display: 'none' }  }}
+          
+        />
+        <Tabs.Screen
+          name="screens/chat/group/navigation"
+          options={{ href: null, tabBarStyle: { display: 'none' }  }}
+          
+        />
+        <Tabs.Screen
+          name="screens/chat/group/user-list"
+          options={{ href: null, tabBarStyle: { display: 'none' }  }}
+          
+        />
+        <Tabs.Screen
           name="screens/configs/comp-screen"
           options={{ href: null, tabBarStyle: { display: 'none' }  }}
           

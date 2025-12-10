@@ -1,17 +1,19 @@
-import { Plus } from 'lucide-react-native';
+import { useRouter } from 'expo-router';
+import { MessageCircleCode, Plus } from 'lucide-react-native';
 import React, { useEffect, useRef } from 'react';
 import { Animated, Dimensions, Modal, PanResponder, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface CreateGroupProps {
   visible: boolean;
   onClose: () => void;
+  setIsGroupModalVisible: () => void;
 }
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-const CreateGroup = ({ visible, onClose }: CreateGroupProps) => {
+const CreateGroup = ({ visible, onClose,setIsGroupModalVisible }: CreateGroupProps) => {
   const translateY = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
-
+  const navigation = useRouter();
   // Anima quando visible muda
   useEffect(() => {
     if (visible) {
@@ -67,6 +69,7 @@ const CreateGroup = ({ visible, onClose }: CreateGroupProps) => {
 
   const mockItems = [
     { id: 1, label: 'Criar Grupo', icon: Plus },
+     { id: 2, label: 'Nova Conversa', icon: MessageCircleCode },
   ];
 
   if (!visible) return null; // ← ADICIONE ISSO!
@@ -115,8 +118,13 @@ const CreateGroup = ({ visible, onClose }: CreateGroupProps) => {
                 <TouchableOpacity
                   key={item.id}
                   onPress={() => {
-                    console.log(`${item.label} clicado`);
-                    closeModal();
+                    if(item.label === 'Criar Grupo'){
+                      setIsGroupModalVisible()
+                      closeModal();
+                    }else{
+                      navigation.push('/screens/chat/new-chat-screen')
+                      closeModal();
+                    }
                   }}
                   style={styles.optionButton}
                 >
@@ -129,6 +137,7 @@ const CreateGroup = ({ visible, onClose }: CreateGroupProps) => {
             })}
           </View>
         </Animated.View>
+       
       </View>
     </Modal>
   );

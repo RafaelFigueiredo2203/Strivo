@@ -1,6 +1,8 @@
 // App.tsx
 import CreateModal from '@/src/components/create-post';
 import FeedOptions from '@/src/components/feed-options';
+import ShareModal from '@/src/components/share-modal';
+import { recentContacts } from '@/src/utils/contact-mock';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Bell, Bookmark, Heart, MessageCircle, MessageSquareMoreIcon, Plus, Share2 } from 'lucide-react-native';
@@ -43,6 +45,7 @@ export default function Feed() {
   const navigation = useRouter();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalCreateVisible, setModalCreateVisible] = useState(false);
+  const [showShare, setShowShare] = useState(false);
 
   const router = useRouter();
   const stories: Story[] = [
@@ -127,6 +130,8 @@ export default function Feed() {
     });
   };
 
+  
+
   return (
     <SafeAreaView className="flex-1 bg-black">
       <StatusBar barStyle="light-content" backgroundColor="#000" />
@@ -183,7 +188,7 @@ export default function Feed() {
                     <View className="relative">
                       <Image
                         source={{ uri: story.avatar }}
-                        className="w-16 h-16 rounded-full"
+                        className="w-20 h-20 rounded-full"
                         style={{ borderWidth: 2, borderColor: 'black' }}
                       />
 
@@ -194,7 +199,7 @@ export default function Feed() {
                 <View className="border-2 border-gray-700 rounded-full p-0.5">
                   <Image
                     source={{ uri: story.avatar }}
-                    className="w-16 h-16 rounded-full"
+                    className="w-20 h-20 rounded-full"
                   />
                 </View>
               )}
@@ -241,7 +246,7 @@ export default function Feed() {
                   </View>
                 </LinearGradient>
                 
-                <View className="ml-3 flex-1">
+                <TouchableOpacity onPress={() => navigation.push('/screens/profile/other-user-profile')} className="ml-3 flex-1">
                   <Text className="text-white font-semibold text-sm">
                     {post.username}
                   </Text>
@@ -250,7 +255,7 @@ export default function Feed() {
                       Rafael Figueiredo
                     </Text>
                   </View>
-                </View>
+                </TouchableOpacity>
               </View>
 
               <TouchableOpacity 
@@ -264,8 +269,10 @@ export default function Feed() {
             {/* Post Image */}
             <Image
               source={{ uri: post.image }}
-              className="w-full"
-              style={{ height: SCREEN_HEIGHT * 0.4 }}
+              style={{
+                width: '100%',
+                aspectRatio: 4/5,
+              }}
               resizeMode="cover"
             />
 
@@ -293,7 +300,7 @@ export default function Feed() {
                   </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity className="flex-row items-center">
+                <TouchableOpacity onPress={() => setShowShare(true)} className="flex-row items-center">
                   <Share2 size={24} color="#fff" />
                   <Text className="text-white text-sm ml-1 font-medium">
                     {post.shares}
@@ -314,6 +321,11 @@ export default function Feed() {
         <FeedOptions visible={modalVisible} onClose={() => setModalVisible(false)} />
         <CreateModal visible={modalCreateVisible} onClose={() => setModalCreateVisible(false)} />
       </ScrollView>
+      <ShareModal
+      visible={showShare}
+      onClose={() => setShowShare(false)}
+      recentContacts={recentContacts}
+    />
     </SafeAreaView>
   );
 }

@@ -1,6 +1,6 @@
 import { Conversation, Message } from '@/src/utils/types/message';
 import { useRouter } from 'expo-router';
-import { ArrowLeft, CheckCheck, MoreVertical, Phone, Send, Video } from 'lucide-react-native';
+import { ArrowLeft, CheckCheck, MoreVertical, Phone, Send, StickerIcon, Video } from 'lucide-react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import MessageActionsMenu from './messa-actions-menu';
@@ -60,7 +60,7 @@ export default function ChatScreen() {
       <StatusBar barStyle="light-content" />
       
       {/* Header */}
-      <View className="px-4 pt-12 pb-3 bg-gray-900 border-b border-gray-800">
+      <View className="px-4 pt-12 pb-3 bg-[#1F2C34] border-b border-gray-800">
         <View className="flex-row items-center justify-between">
           <View className="flex-row items-center flex-1">
             <TouchableOpacity className="mr-3" onPress={() => navigation.back()}>
@@ -143,16 +143,23 @@ export default function ChatScreen() {
 
       {/* Input */}
       <View className="px-4 py-3 bg-gray-900 border-t border-gray-800">
-        <View className="flex-row items-start  bg-gray-800 rounded-full px-4 py-2 mb-4">
+        <View className="flex-row items-start  bg-[#25292e] rounded-full px-4 py-2 mb-4">
           <TextInput
-            placeholder="Mensagem..."
-            placeholderTextColor="#6b7280"
+            placeholder="Escreva uma mensagem..."
+            placeholderTextColor="#39FF14"
             value={inputText}
             onChangeText={setInputText}
-            className="flex-1 text-white text-base mr-3"
+            className="flex-1 text-white text-base mr-3 "
             multiline
             maxLength={500}
           />
+          <TouchableOpacity
+            onPress={() => {}}
+            disabled={!inputText.trim()}
+            className={`w-10 h-10 mr-2 rounded-full flex items-center bg-gray-700 justify-center text-center `}
+          >
+            <StickerIcon size={18} color={'#6b7280'} />
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={handleSend}
             disabled={!inputText.trim()}

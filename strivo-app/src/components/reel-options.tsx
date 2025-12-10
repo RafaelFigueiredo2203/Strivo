@@ -11,6 +11,7 @@ const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 const FeedOptions = ({ visible, onClose }: FeedOptionsProps) => {
   const translateY = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
+  const [showInterestOptions, setShowInterestOptions] = React.useState(false);
 
   // Anima quando visible muda
   useEffect(() => {
@@ -26,6 +27,7 @@ const FeedOptions = ({ visible, onClose }: FeedOptionsProps) => {
     } else {
       // Quando fechar, reseta para baixo
       translateY.setValue(SCREEN_HEIGHT);
+      setShowInterestOptions(false);
     }
   }, [visible, translateY]);
 
@@ -73,7 +75,15 @@ const FeedOptions = ({ visible, onClose }: FeedOptionsProps) => {
     { id: 5, label: 'Denunciar Conteúdo', icon: AlertCircle },
   ];
 
-  if (!visible) return null; // ← ADICIONE ISSO!
+  const interestReasons = [
+    'O conteúdo é irrelevante',
+    'Simplesmente não gostei',
+    'Contém Ódio, Violência ou Bullying',
+    'Conteúdo Adulto',
+    'Outro Motivo',
+  ];
+
+  if (!visible) return null;
 
   return (
     <Modal
@@ -112,24 +122,53 @@ const FeedOptions = ({ visible, onClose }: FeedOptionsProps) => {
 
           {/* Options */}
           <View style={styles.optionsContainer}>
-            {mockItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <TouchableOpacity
-                  key={item.id}
-                  onPress={() => {
-                    console.log(`${item.label} clicado`);
-                    closeModal();
-                  }}
-                  style={styles.optionButton}
-                >
-                  <View style={styles.iconContainer}>
-                    <Icon color="white" size={24} />
-                  </View>
-                  <Text style={styles.optionText}>{item.label}</Text>
-                </TouchableOpacity>
-              );
-            })}
+            {!showInterestOptions ? (
+              // Menu principal
+              <>
+                {mockItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <TouchableOpacity
+                      key={item.id}
+                      onPress={() => {
+                        if (item.id === 4) {
+                          // "Não tenho interesse" clicado
+                          setShowInterestOptions(true);
+                        } else {
+                          console.log(`${item.label} clicado`);
+                          closeModal();
+                        }
+                      }}
+                      style={styles.optionButton}
+                    >
+                      <View style={styles.iconContainer}>
+                        <Icon color="white" size={24} />
+                      </View>
+                      <Text style={styles.optionText}>{item.label}</Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </>
+            ) : (
+              // Submenu de motivos
+              <>
+                <Text style={styles.reasonTitle}>
+                  <Text style={styles.reasonTitleBold}>Por que você não teve interesse neste conteúdo?</Text>
+                </Text>
+                {interestReasons.map((reason, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => {
+                      console.log(`Motivo selecionado: ${reason}`);
+                      closeModal();
+                    }}
+                    style={styles.reasonButton}
+                  >
+                    <Text style={styles.reasonText}>• {reason}</Text>
+                  </TouchableOpacity>
+                ))}
+              </>
+            )}
           </View>
         </Animated.View>
       </View>
@@ -153,7 +192,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#171d25',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
-    paddingBottom: 20, // Adiciona espaço para safe area
+    paddingBottom: 20,
   },
   handleContainer: {
     alignItems: 'center',
@@ -199,6 +238,24 @@ const styles = StyleSheet.create({
   optionText: {
     color: 'white',
     fontSize: 18,
+  },
+  reasonTitle: {
+    color: 'white',
+    fontSize: 16,
+    marginBottom: 20,
+    paddingHorizontal: 16,
+  },
+  reasonTitleBold: {
+    fontWeight: 'bold',
+  },
+  reasonButton: {
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    marginBottom: 4,
+  },
+  reasonText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
 

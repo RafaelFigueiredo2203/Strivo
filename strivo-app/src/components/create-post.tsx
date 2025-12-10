@@ -1,7 +1,11 @@
+
 import { useRouter } from 'expo-router';
-import { Clapperboard, Grid3x3, PlusCircleIcon } from 'lucide-react-native';
-import React, { useEffect, useRef } from 'react';
+import { Clapperboard, Grid3x3, PlusCircleIcon, Video } from 'lucide-react-native';
+import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Dimensions, Modal, PanResponder, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import CreateKlipScreen from './create/create-klip';
+import StartLiveScreen from './create/start-live';
+
 
 interface CreateModalProps {
   visible: boolean;
@@ -12,15 +16,17 @@ const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 const CreateModal = ({ visible, onClose }: CreateModalProps) => {
   const translateY = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
-  const onCloseRef = useRef(onClose); // Guarda referência atualizada
+  const onCloseRef = useRef(onClose);
   const navigation = useRouter();
   
-  // Atualiza a referência sempre que onClose mudar
+  // Estados para os modals
+  const [showKlipModal, setShowKlipModal] = useState(false);
+  const [showLiveModal, setShowLiveModal] = useState(false);
+  
   useEffect(() => {
     onCloseRef.current = onClose;
   }, [onClose]);
 
-  // Anima quando visible muda
   useEffect(() => {
     if (visible) {
       Animated.spring(translateY, {
@@ -38,7 +44,7 @@ const CreateModal = ({ visible, onClose }: CreateModalProps) => {
       duration: 300,
       useNativeDriver: true,
     }).start(() => {
-      if (onCloseRef.current) { // Usa a referência atualizada
+      if (onCloseRef.current) {
         onCloseRef.current();
       }
     });
@@ -71,77 +77,93 @@ const CreateModal = ({ visible, onClose }: CreateModalProps) => {
   ).current;
 
   const mockItems = [
-    { id: 1, icon: Clapperboard, label: 'Klips',  },
-    { id: 2, icon: Grid3x3, label: 'Post',  },
-    { id: 3, icon: PlusCircleIcon, label: 'Story',  },
+    { id: 1, icon: Clapperboard, label: 'Klips' },
+    { id: 2, icon: Grid3x3, label: 'Post' },
+    { id: 3, icon: PlusCircleIcon, label: 'Story' },
+    { id: 4, icon: Video, label: 'Live' },
   ];
 
+  const handleOptionPress = (label: string) => {
+    closeModal(); // Fecha o modal principal primeiro
+    
+    // Pequeno delay para suavizar a transição
+    setTimeout(() => {
+      if (label === 'Klips') {
+        setShowKlipModal(true);
+      } else if (label === 'Story') {
+        navigation.push('/screens/story-screen');
+      } else if (label === 'Post') {
+        navigation.push('/screens/create/create-post');
+      } else if (label === 'Live') {
+        setShowLiveModal(true);
+      }
+    }, 300);
+  };
+
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="none"
-      onRequestClose={closeModal}
-    >
-      <View style={styles.container}>
-        {/* Backdrop */}
-        <TouchableOpacity
-          activeOpacity={1}
-          onPress={closeModal}
-          style={styles.backdrop}
-        />
+    <>
+      <Modal
+        visible={visible}
+        transparent
+        animationType="none"
+        onRequestClose={closeModal}
+      >
+        <View style={styles.container}>
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={closeModal}
+            style={styles.backdrop}
+          />
 
-        {/* Modal Content */}
-        <Animated.View
-          style={[
-            styles.modalContent,
-            {
-              transform: [{ translateY }],
-            },
-          ]}
-          {...panResponder.panHandlers}
-        >
-          {/* Handle bar */}
-          <View style={styles.handleContainer}>
-            <View style={styles.handle} />
-          </View>
+          <Animated.View
+            style={[
+              styles.modalContent,
+              {
+                transform: [{ translateY }],
+              },
+            ]}
+            {...panResponder.panHandlers}
+          >
+            <View style={styles.handleContainer}>
+              <View style={styles.handle} />
+            </View>
 
-          {/* Title */}
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>Criar</Text>
-          </View>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>Criar</Text>
+            </View>
 
-          {/* Options */}
-          <View style={styles.optionsContainer}>
-            {mockItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <TouchableOpacity
-                  key={item.id}
-                  onPress={() => {
-                    if(item.label === 'Story'){
-                    navigation.push('/screens/story-screen')
-                    }
-                    console.log(`${item.label} clicado`);
-                    closeModal();
-                  }}
-                  style={styles.optionButton}
-                >
-                  <View
-                    style={[
-                      styles.iconContainer, 
-                    ]}
+            <View style={styles.optionsContainer}>
+              {mockItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <TouchableOpacity
+                    key={item.id}
+                    onPress={() => handleOptionPress(item.label)}
+                    style={styles.optionButton}
                   >
-                    <Icon color="white" size={24} />
-                  </View>
-                  <Text style={styles.optionText}>{item.label}</Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </Animated.View>
-      </View>
-    </Modal>
+                    <View style={styles.iconContainer}>
+                      <Icon color="white" size={24} />
+                    </View>
+                    <Text style={styles.optionText}>{item.label}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </Animated.View>
+        </View>
+      </Modal>
+
+      {/* Modals dos componentes */}
+      <CreateKlipScreen 
+        visible={showKlipModal} 
+        onClose={() => setShowKlipModal(false)} 
+      />
+      
+      <StartLiveScreen 
+        visible={showLiveModal} 
+        onClose={() => setShowLiveModal(false)} 
+      />
+    </>
   );
 };
 
@@ -189,7 +211,7 @@ const styles = StyleSheet.create({
   optionButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 16,
+    paddingVertical: 12,
     paddingHorizontal: 16,
     marginBottom: 8,
     borderRadius: 12,

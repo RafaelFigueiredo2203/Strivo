@@ -1,10 +1,8 @@
 import {
   Camera,
-  Copy,
   Heart,
   MessageCircle,
   MoreVertical,
-  Plus,
   Share2,
   ThumbsDown,
   Volume2,
@@ -28,10 +26,11 @@ import {
 } from 'react-native';
 
 import ReelsOptions from '@/src/components/reel-options';
+import ShareModal from '@/src/components/share-modal';
+import { recentContacts } from '@/src/utils/contact-mock';
 import { ResizeMode, Video } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -198,14 +197,6 @@ const KlipsScreen = () => {
     },
   ]);
 
-  const recentContacts = [
-    { id: '1', name: 'Gb', avatar: 'https://i.pravatar.cc/150?img=1', online: true },
-    { id: '2', name: 'Medeiros', avatar: 'https://i.pravatar.cc/150?img=2', online: true },
-    { id: '3', name: 'Moraes', avatar: 'https://i.pravatar.cc/150?img=3', online: false },
-    { id: '4', name: 'silvasx', avatar: 'https://i.pravatar.cc/150?img=4', online: false },
-    { id: '5', name: 'Matheus', avatar: 'https://i.pravatar.cc/150?img=5', online: false },
-    { id: '6', name: 'Joker', avatar: 'https://i.pravatar.cc/150?img=6', online: false },
-  ];
 
   const activeKlip = klips[currentIndex];
 
@@ -589,7 +580,6 @@ const KlipsScreen = () => {
                 justifyContent: 'center',
               }}
             >
-              <Plus size={18} color="black" strokeWidth={3} />
             </TouchableOpacity>
           )}
         </View>
@@ -847,207 +837,11 @@ const KlipsScreen = () => {
       </Modal>
 
       {/* Share Modal */}
-      <Modal
+      <ShareModal
         visible={showShare}
-        animationType="fade"
-        transparent={true}
-        onRequestClose={() => setShowShare(false)}
-        hardwareAccelerated={true}
-        statusBarTranslucent={true}
-      >
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        >
-          <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
-            <TouchableOpacity
-              style={{ flex: 1, }}
-              activeOpacity={1}
-              onPress={() => setShowShare(false)}
-            />
-            <View
-              style={{
-                backgroundColor: '#1a1a1a',
-                borderTopLeftRadius: 24,
-                borderTopRightRadius: 24,
-                paddingBottom: 20,
-              }}
-            >
-              {/* Header */}
-              <View
-                style={{
-                  alignItems: 'center',
-                  paddingVertical: 16,
-                  borderBottomWidth: 1,
-                  borderBottomColor: '#374151',
-                }}
-              >
-                <View
-                  style={{
-                    width: 48,
-                    height: 6,
-                    backgroundColor: '#4B5563',
-                    borderRadius: 3,
-                    marginBottom: 12,
-                  }}
-                />
-                <Text style={{ color: 'white', fontWeight: '600', fontSize: 18 }}>
-                  Enviar para
-                </Text>
-              </View>
-
-              {/* Recent Contacts */}
-              <View style={{ paddingVertical: 20 }}>
-                <FlatList
-                  data={recentContacts}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={{ paddingHorizontal: 16 }}
-                  keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity
-                      style={{
-                        alignItems: 'center',
-                        marginRight: 20,
-                        width: 70,
-                      }}
-                    >
-                      <View style={{ position: 'relative' }}>
-                        <Image
-                          source={{ uri: item.avatar }}
-                          style={{
-                            width: 60,
-                            height: 60,
-                            borderRadius: 30,
-                            borderWidth: 2,
-                            borderColor: '#374151',
-                          }}
-                        />
-                        {item.online && (
-                          <View
-                            style={{
-                              position: 'absolute',
-                              bottom: 2,
-                              right: 2,
-                              width: 14,
-                              height: 14,
-                              borderRadius: 7,
-                              backgroundColor: '#00FF40',
-                              borderWidth: 2,
-                              borderColor: '#1a1a1a',
-                            }}
-                          />
-                        )}
-                      </View>
-                      <Text
-                        style={{
-                          color: 'white',
-                          fontSize: 12,
-                          marginTop: 8,
-                          textAlign: 'center',
-                        }}
-                        numberOfLines={1}
-                      >
-                        {item.name}
-                      </Text>
-                    </TouchableOpacity>
-                  )}
-                />
-              </View>
-
-              {/* Share Options */}
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-around',
-                  paddingHorizontal: 20,
-                  paddingTop: 16,
-                  borderTopWidth: 1,
-                  borderTopColor: '#374151',
-                }}
-              >
-                {/* WhatsApp */}
-                <TouchableOpacity
-                  style={{
-                    alignItems: 'center',
-                    flex: 1,
-                  }}
-                >
-                  <View
-                    style={{
-                      width: 56,
-                      height: 56,
-                      borderRadius: 28,
-                      borderWidth: 2,
-                      borderColor: '#4B5563',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: 8,
-                    }}
-                  >
-                    <MessageCircle size={28} color="#fff" />
-                  </View>
-                  <Text style={{ color: 'white', fontSize: 12, textAlign: 'center' }}>
-                    WhatsApp
-                  </Text>
-                </TouchableOpacity>
-
-                {/* Copiar Link */}
-                <TouchableOpacity
-                  style={{
-                    alignItems: 'center',
-                    flex: 1,
-                  }}
-                >
-                  <View
-                    style={{
-                      width: 56,
-                      height: 56,
-                      borderRadius: 28,
-                      borderWidth: 2,
-                      borderColor: '#4B5563',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: 8,
-                    }}
-                  >
-                    <Copy size={28} color="#fff" />
-                  </View>
-                  <Text style={{ color: 'white', fontSize: 12, textAlign: 'center' }}>
-                    Copiar Link
-                  </Text>
-                </TouchableOpacity>
-
-                {/* Status/Story */}
-                <TouchableOpacity
-                  style={{
-                    alignItems: 'center',
-                    flex: 1,
-                  }}
-                >
-                  <View
-                    style={{
-                      width: 56,
-                      height: 56,
-                      borderRadius: 28,
-                      borderWidth: 2,
-                      borderColor: '#4B5563',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: 8,
-                    }}
-                  >
-                    <Plus size={28} color="#fff" />
-                  </View>
-                  <Text style={{ color: 'white', fontSize: 12, textAlign: 'center' }}>
-                    Status
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </SafeAreaView>
-        </KeyboardAvoidingView>
-      </Modal>
+        onClose={() => setShowShare(false)}
+        recentContacts={recentContacts}
+      />
       <ReelsOptions visible={reelsOptionsVisible} onClose={() => setReelsOptionsVisible(false)} />
     </View>
   );

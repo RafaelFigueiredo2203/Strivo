@@ -63,7 +63,7 @@ export default function NotificationsScreen() {
 
       <TouchableOpacity
         onPress={() => handleFollow(item.id)}
-        className={`px-4 py-2 rounded-lg ${followState[item.id] ? "bg-gray-700" : "bg-[#00FF40]"}`}
+        className={`px-3 py-1 rounded-lg ${followState[item.id] ? "bg-gray-700" : "bg-[#00FF40]"}`}
       >
         <Text className="font-bold text-black">{followState[item.id] ? "Seguindo" : "Seguir de Volta"}</Text>
       </TouchableOpacity>
